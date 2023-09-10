@@ -1,15 +1,24 @@
 on: [push]
-name: build
 jobs:
-  runhaskell:
-    name: Build Application
-    runs-on: ubuntu-latest # or macOS-latest, or windows-latest
+  build:
+    name: Build
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: haskell/actions/setup@v2
         with:
-          ghc-version: '9.2.8' # Exact version of ghc to use
-          # cabal-version: 'latest'. Omitted, but defaults to 'latest'
+          ghc-version: '9.2.8'
           enable-stack: true
           stack-version: 'latest'
       - run: stack build
+  test: 
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: haskell/actions/setup@v2
+        with:
+          ghc-version: '9.2.8'
+          enable-stack: true
+          stack-version: 'latest'
+      - run: stack test
