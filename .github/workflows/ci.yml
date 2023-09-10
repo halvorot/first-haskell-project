@@ -1,16 +1,33 @@
 on: push
 
 jobs:
+  hlint:
+    name: Linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Set up HLint"
+        uses: haskell/actions/hlint-setup@v2
+
+      - name: "Run HLint"
+        uses: haskell/actions/hlint-run@v2
+        with:
+          path: src/
+          fail-on: warning
+
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: haskell/actions/setup@v2
         with:
           ghc-version: "9.2.8"
           enable-stack: true
           stack-version: "latest"
+
       - run: stack build
 
   test:
@@ -18,9 +35,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: haskell/actions/setup@v2
         with:
           ghc-version: "9.2.8"
           enable-stack: true
           stack-version: "latest"
+
       - run: stack test
